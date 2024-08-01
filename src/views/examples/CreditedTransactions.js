@@ -260,12 +260,9 @@ export default function CreditedTransactions() {
     if (!utr) {
       setUtrError("Please enter a  UTR number.");
       isValid = false;
-    } else if (!/^\d{10}$/.test(utr)) {
-      setUtrError("UTR number must be  10 or more characters.");
-      isValid = false;
-    } else {
-      setUtrError('');
-    }
+    } else if (/^\d*$/.test(utr)){
+      setUtrError(" ");
+    } 
 
 
     if (!image) {
@@ -289,7 +286,7 @@ export default function CreditedTransactions() {
 
 
 
-    if (paidNumber.length === 10 && utr.length === 10 ) {
+    if (paidNumber.length === 10) {
 
       const payload =
       {
@@ -403,16 +400,13 @@ export default function CreditedTransactions() {
 
   const handleUtr = (e) => {
     const value = e.target.value;
-    if (/^\d{0,10}$/.test(value)) {
+    if (/^\d*$/.test(value)) {
       setUtr(value);
-      if (value.length !== 10) {
-        setUtrError('Utr number must be exactly 10 digits.');
-
-      } else {
-        setUtrError('');
-      }
+     
     }
   };
+
+ 
 
   const handlePaidTo = (e) => {
     const selectPaid = e.target.value;
@@ -520,6 +514,7 @@ export default function CreditedTransactions() {
                       </tr>
 
                     ) : (
+                      users && users.length>0?(
                       users.map((user, index) => {
                         console.log(user, 'bharath');
                         return (
@@ -553,6 +548,11 @@ export default function CreditedTransactions() {
                         );
                       })
 
+                    ):(
+                       <tr>
+                      <td colSpan="8" className="text-center">Data not found</td>
+                      </tr>
+                    )
                     )}
                   </tbody>
 

@@ -191,20 +191,15 @@ export default function CreditedUser() {
 
     const handleUtr = (e) => {
         const value = e.target.value;
-        if (/^\d{0,10}$/.test(value)) {
+        if (/^\d*$/.test(value)) {
             setUtr(value);
-            if (value.length !== 10) {
-                setUtrError('Utr number must be exactly 10 digits.');
-
-            } else {
-                setUtrError('');
-            }
         }
     };
 
     const ModalAdd = (e) => {
         e.preventDefault();
         let isValid = true;
+        console.log(e,"gfhjkhjk")
 
         if (!amount) {
             setAmountError("Please enter an amount.");
@@ -263,11 +258,8 @@ export default function CreditedUser() {
         if (!utr) {
             setUtrError("Please enter a  UTR number.");
             isValid = false;
-        } else if (!/^\d{10}$/.test(utr)) {
-            setUtrError("UTR number must be  10 or more characters.");
-            isValid = false;
-        } else {
-            setUtrError('');
+        } else if (/^\d*$/.test(utr)) {
+            setUtrError("");
         }
 
 
@@ -289,40 +281,39 @@ export default function CreditedUser() {
             return;
         }
 
-        if (paidNumber.length === 10 && utr.length === 10 )
-        {
-        setLoading(true);
-        const payload =
-        {
-            "user_uuid": Loginuuid,
-            "amount": amount,
-            "type": type === 'others' ? otherType : type,
-            "paid_to": paidto === 'Others' ? PaidOthers : paidto,
-            "paid_number": paidNumber,
-            "utr": utr,
-            "image": image
+        if (paidNumber.length === 10) {
+            setLoading(true);
+            const payload =
+            {
+                "user_uuid": Loginuuid,
+                "amount": amount,
+                "type": type === 'others' ? otherType : type,
+                "paid_to": paidto === 'Others' ? PaidOthers : paidto,
+                "paid_number": paidNumber,
+                "utr": utr,
+                "image": image
 
-        }
-        axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit`, payload, {
-            headers: {
-                "x-auth-token": userdata
             }
-        })
-            .then((res) => {
-                console.log(res?.data?.data, "kcdceji")
+            axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit`, payload, {
+                headers: {
+                    "x-auth-token": userdata
+                }
+            })
+                .then((res) => {
+                    console.log(res?.data?.data, "kcdceji")
 
-                setTimeout(() => {
-                    getUsers();
-                    setShow(false)
-                    handleClose();
+                    setTimeout(() => {
+                        getUsers();
+                        setShow(false)
+                        handleClose();
+                        setLoading(false)
+                    }, 1000)
+
+                })
+                .catch((error) => {
+                    console.log("it Might be an error")
                     setLoading(false)
-                }, 1000)
-
-            })
-            .catch((error) => {
-                console.log("it Might be an error")
-                setLoading(false)
-            })
+                })
         }
 
 
@@ -392,11 +383,8 @@ export default function CreditedUser() {
         if (!utr) {
             setUtrError("Please enter a  UTR number.");
             isValid = false;
-        } else if (!/^\d{10}$/.test(utr)) {
-            setUtrError("UTR number must be  10 or more characters.");
-            isValid = false;
-        } else {
-            setUtrError('');
+        } else if (/^\d*$/.test(utr)) {
+            setUtrError(" ");
         }
 
 
@@ -418,9 +406,9 @@ export default function CreditedUser() {
             return;
         }
 
-       
 
-        setLoading(true)
+
+       
         const updatePayLoad = {
             "user_uuid": Loginuuid,
             "amount": amount,
@@ -431,7 +419,7 @@ export default function CreditedUser() {
             "image": image,
         }
 
-
+        setLoading(true)
         axios.put(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/update/${updatedetails.uuid}`, updatePayLoad, {
             headers: {
                 "x-auth-token": userdata
@@ -442,14 +430,14 @@ export default function CreditedUser() {
                 setTimeout(() => {
                     setUsers();
                     setShow(false);
-                    setLoading(true)
+                    setLoading(false)
                 }, 1000)
 
 
             })
             .catch((error) => {
                 console.log("there might be a error", error);
-                setLoading(true)
+                setLoading(false)
             });
     }
 
@@ -491,11 +479,11 @@ export default function CreditedUser() {
         )
             .then((res) => {
                 console.log(res.data, "gfhdfhsgjhsgjh")
-                setTimeout(()=>{
+                setTimeout(() => {
                     const filename = res.data.image.filename;
                     setImage(filename);
-                },1000)
-               
+                }, 1000)
+
             })
             .catch((err) => {
                 console.log(err.response)
@@ -594,23 +582,31 @@ export default function CreditedUser() {
                                     </thead>
                                     <tbody>
 
-                                        {loading ?
-                                         <tr>
-                                            <td colSpan="8" className="text-center"><Spinner animation="border" /></td>
-                                        </tr> : (
-                                            users?.map((user, index) =>
-                                            (
-                                                <tr key={user._id}>
-                                                    <td>{user.amount}</td>
-                                                    <td>{user.type}</td>
-                                                    <td>{user.paid_to}</td>
-                                                    <td>{user.paid_number}</td>
-                                                    <td>{user.utr}</td>
-                                                    <td>{user.approved_status}</td>
-                                                    <td><img src={user.image} alt='' crossOrigin='anonymous' style={{ width: '50px', height: '50px' }} /></td>
-                                                    <td><Button color='primary' size="sm" disabled={user.approved_status !== "Rejected"} onClick={() => handleEdit(user)} >Edit</Button></td>
+                                        {loading ? (
+                                            <tr>
+                                                <td colSpan="8" className="text-center"><Spinner animation="border" /></td>
+                                            </tr>
+                                        ) : (
+                                            users && users.length > 0 ? (
+                                                users?.map((user, index) =>
+                                                (
+                                                    <tr key={user._id}>
+                                                        <td>{user.amount}</td>
+                                                        <td>{user.type}</td>
+                                                        <td>{user.paid_to}</td>
+                                                        <td>{user.paid_number}</td>
+                                                        <td>{user.utr}</td>
+                                                        <td>{user.approved_status}</td>
+                                                        <td><img src={user.image} alt='' crossOrigin='anonymous' style={{ width: '50px', height: '50px' }} /></td>
+                                                        <td><Button color='primary' size="sm" disabled={user.approved_status !== "Rejected"} onClick={() => handleEdit(user)} >Edit</Button></td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan="8" className="text-center">Data not found</td>
                                                 </tr>
-                                            ))
+                                            )
+
                                         )}
                                     </tbody>
                                 </Table>
@@ -815,7 +811,7 @@ export default function CreditedUser() {
                                 </FormGroup>
                                 <div className="text-center">
                                     <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                                    {loading?'saving...':'save'}
+                                        {loading ? 'saving...' : 'save'}
                                     </Button>
                                     <Button variant="danger" onClick={handleClose} disabled={loading}>
                                         Close
@@ -989,7 +985,7 @@ export default function CreditedUser() {
                                 </FormGroup>
                                 <div className="text-center">
                                     <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                                        {loading?"saving...":'save'}
+                                        {loading ? "saving..." : 'save'}
                                     </Button>
                                     <Button variant="danger" onClick={edithandleClose} >
                                         Close

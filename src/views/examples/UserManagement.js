@@ -386,6 +386,7 @@ export default function UserManagement() {
                         </td>
                       </tr>
                     ) : (
+                      users && users.length>0?(
                       users.map((user, index) => {
                         console.log(user, 'vgftrfyg');
                         return (
@@ -429,6 +430,11 @@ export default function UserManagement() {
                         );
                       })
 
+                    ):(
+                       <tr>
+                      <td colSpan="8" className="text-center">Data not found</td>
+                      </tr>
+                    )
                     )}
                   </tbody>
 

@@ -38,7 +38,7 @@ var UserRoutes = [
   },
   {
     path: "/ProfileUser",
-    name: " My Profile",
+    name: "My Profile",
     icon: "ni ni-single-02 text-yellow",
     component: <ProfileUser />,
     layout: "/user",

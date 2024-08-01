@@ -287,10 +287,12 @@ const AdminNavbar = (props) => {
                   <i className="ni ni-single-02" />
                   <span>My profile</span>
                 </DropdownItem>
-                <DropdownItem onClick={handleShow}>
+                {user?.data?.role==='user'?(
+                <DropdownItem  onClick={handleShow}>
                   <i className="ni ni-settings-gear-65" />
                   <span>Change Password</span>
                 </DropdownItem> 
+                ):""}
                
                 <DropdownItem divider />
                 <DropdownItem  onClick={handleLogout}>

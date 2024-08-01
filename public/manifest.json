@@ -1,9 +1,9 @@
 {
-  "short_name": " Surprise Stash React",
+  "short_name": " Surprise Stash ",
   "name": " Surprise Stash React by Creative Tim",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "Stash_design.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     }

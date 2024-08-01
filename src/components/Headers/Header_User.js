@@ -181,7 +181,7 @@ const Header_User = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Today Credited
+                          Total Today Credited
                         </CardTitle>
                         <span><small><i class="fa fa-inr" /> </small> <strong>{loading? <Spinner size="sm" />:users.todayCreditAmount}</strong></span>
                       </div>
@@ -214,7 +214,7 @@ const Header_User = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Today Debited
+                         Total Today Debited
                         </CardTitle>
                         <span><small><i class="fa fa-inr" /> </small><strong>{loading? <Spinner size="sm" />:users.todayDebitAmount}</strong></span>
                       </div>
@@ -269,38 +269,7 @@ const Header_User = () => {
                 </Card>
               </Col>
 
-              <Col lg="6" xl="3" style={{ marginTop: "18px" }} onClick={handleDebit}>
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                           Your Today Debits
-                        </CardTitle>
-                        <span><small><i class="fa fa-inr" /> </small><strong>{loading? <Spinner size="sm" />:users.todayUserDebitAmount}</strong></span>
-                      </div>
-                      <Col className="col-auto">
-                      <div
-                          className=" bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
-                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
-                        >
-                          <i class="fa-solid fa-money-bill-transfer"></i>
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-success mr-2">
-                        <i className="fas fa-arrow-up" /> 12%
-                      </span>{" "} */}
-                      {/* <span className="text-nowrap">Since last month</span> */}
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-
+             
 
               <Col lg="6" xl="3" style={{ marginTop: "18px" }} onClick={handleCredit}>
                 <Card className="card-stats mb-4 mb-xl-0">

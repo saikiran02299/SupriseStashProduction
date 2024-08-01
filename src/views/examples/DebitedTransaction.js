@@ -425,6 +425,7 @@ export default function DebitedTransaction() {
                       </tr>
 
                     ) : (
+                      users && users.length>0?(
                       users.map((user, index) => {
                         console.log(user, 'vgftrfyg');
                         return (
@@ -451,7 +452,12 @@ export default function DebitedTransaction() {
                         );
                       })
 
-                    )}
+                    ):( 
+                      <tr>
+                      <td colSpan="8" className="text-center">Data not found</td>
+                      </tr>
+                    )
+                    ) }
                   </tbody>
 
                 </Table>

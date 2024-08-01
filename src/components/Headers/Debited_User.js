@@ -40,7 +40,7 @@ const Debited_User = () => {
       .then((res) => {
         console.log(res.data, 'cdid');
         setUsers(res.data);
-        setLoading(true);
+        setLoading(false);
       })
       .catch((error)=>{
         console.log("error!!");
@@ -125,38 +125,7 @@ const Debited_User = () => {
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                         Today user Debit
-                        </CardTitle>
-                        <span><small><i class="fa fa-inr"/></small> <strong>{loading? <Spinner size="sm" />:users.todayUserDebitAmount}</strong></span>
-                      </div>
-                      <Col className="col-auto">
-                      <div
-                          className=" bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
-                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
-                        >
-                          <i class="fa-solid fa-money-bill-transfer"></i>
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-danger mr-2">
-                        <i className="fas fa-arrow-down" /> 3.48%
-                      </span>{" "} */}
-                      {/* <span className="text-nowrap">Since last week</span> */}
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-
+              
               <Col lg="6" xl="3">
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
