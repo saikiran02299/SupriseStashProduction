@@ -199,7 +199,7 @@ export default function CreditedUser() {
     const ModalAdd = (e) => {
         e.preventDefault();
         let isValid = true;
-        console.log(e,"gfhjkhjk")
+        console.log(e, "gfhjkhjk")
 
         if (!amount) {
             setAmountError("Please enter an amount.");
@@ -408,7 +408,7 @@ export default function CreditedUser() {
 
 
 
-       
+
         const updatePayLoad = {
             "user_uuid": Loginuuid,
             "amount": amount,
@@ -664,14 +664,11 @@ export default function CreditedUser() {
 
 
             <Modal show={show} onHide={handleClose} animation={false} >
-                <Modal.Header>
-                    <h3>Credited Details</h3>
-                </Modal.Header>
-                <Modal.Body  >
+                <Modal.Body style={{ height: "100%" }} >
                     {/* <Col lg="5" md="7"> */}
-                    <Card className="bg-secondary shadow border-0" >
+                    <Card className="bg-secondary shadow border-0" style={{ height: "100%", marginTop: "25px" }}>
                         <CardBody className="px-lg-5 py-lg-5"  >
-                            <Form role="form" onSubmit={ModalAdd} style={{ marginTop: "-94px" }} >
+                            <Form role="form" onSubmit={ModalAdd} style={{ marginTop: "-94px", paddingTop: "25px" }} >
                                 <FormGroup className="mb-3">
                                     <label>Amount:</label>
                                     <InputGroup className="input-group-alternative">
@@ -802,8 +799,6 @@ export default function CreditedUser() {
                                             // placeholder="ScreenShort"
                                             type="file"
                                             onChange={ImageUpload}
-
-
                                         />
 
                                     </InputGroup>
@@ -811,7 +806,7 @@ export default function CreditedUser() {
                                 </FormGroup>
                                 <div className="text-center">
                                     <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                                        {loading ? 'saving...' : 'save'}
+                                        {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                                     </Button>
                                     <Button variant="danger" onClick={handleClose} disabled={loading}>
                                         Close
@@ -827,14 +822,12 @@ export default function CreditedUser() {
             {/* Edit modal */}
 
             <Modal show={editshow} onHide={edithandleClose} animation={false} >
-                <Modal.Header>
-                    <h3>Credited Details</h3>
-                </Modal.Header>
-                <Modal.Body  >
+
+                <Modal.Body style={{ height: "100%" }}>
                     {/* <Col lg="5" md="7"> */}
-                    <Card className="bg-secondary shadow border-0" >
+                    <Card className="bg-secondary shadow border-0" style={{ height: "100%", marginTop: "8px" }}>
                         <CardBody className="px-lg-5 py-lg-5"  >
-                            <Form role="form" onSubmit={ModalForm} style={{ marginTop: "-94px" }} >
+                            <Form role="form" onSubmit={ModalForm} style={{ marginTop: "-50px" }} >
                                 <FormGroup className="mb-3">
                                     <label>Amount:</label>
                                     <InputGroup className="input-group-alternative">
@@ -873,7 +866,7 @@ export default function CreditedUser() {
                                     {typeError && <div style={{ color: 'red' }}>{typeError}</div>}
                                 </FormGroup>
                                 {type === 'others' && (
-                                    <div style={{ padding: '10px', borderRadius: '5px', marginTop: '10px' }}>
+                                     <div style={{ padding: '10px', borderRadius: '5px', marginTop: '10px' }}>
                                         <label htmlFor="others">Others:</label>
                                         <InputGroup className="input-group-alternative">
                                             <input
@@ -910,7 +903,7 @@ export default function CreditedUser() {
                                     {paidToError && <div style={{ color: 'red' }}>{paidToError}</div>}
                                 </FormGroup>
                                 {paidto === 'Others' && (
-                                    <div style={{ padding: '10px', borderRadius: '5px', marginTop: '10px' }}>
+                                  <div style={{ padding: '10px', borderRadius: '5px', marginTop: '10px' }}>
                                         <label htmlFor="others">Others:</label>
                                         <InputGroup className="input-group-alternative">
                                             <input
@@ -921,7 +914,6 @@ export default function CreditedUser() {
                                                 placeholder="Enter Others"
                                                 required
                                                 style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '0px' }}
-
                                             />
                                         </InputGroup>
 
@@ -985,7 +977,7 @@ export default function CreditedUser() {
                                 </FormGroup>
                                 <div className="text-center">
                                     <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                                        {loading ? "saving..." : 'save'}
+                                    {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                                     </Button>
                                     <Button variant="danger" onClick={edithandleClose} >
                                         Close

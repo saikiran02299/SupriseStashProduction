@@ -613,13 +613,13 @@ export default function CreditedTransactions() {
 
       <Modal show={show} onHide={handleClose} animation={false} >
         <Modal.Header>
-          <h3>Credited Details</h3>
+          {/* <h3>Credited Details</h3> */}
         </Modal.Header>
-        <Modal.Body  >
+        <Modal.Body   style={{height:"100%"}}>
           {/* <Col lg="5" md="7"> */}
-          <Card className="bg-secondary shadow border-0" >
+          <Card className="bg-secondary shadow border-0"  style={{height:"100%"}}>
             <CardBody className="px-lg-5 py-lg-5"  >
-              <Form role="form" onSubmit={ModalForm} style={{ marginTop: "-94px" }} >
+              <Form role="form" onSubmit={ModalForm} style={{ marginTop: "-94px",paddingTop:"25px" }} >
 
                 <FormGroup className="mb-3">
                   <label>User Name:</label>
@@ -788,7 +788,7 @@ export default function CreditedTransactions() {
                 </FormGroup>
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit"  disabled={loading}>
-                    {loading?'saving...':'save'}
+                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={handleClose} disabled={loading}>
                     Close
@@ -804,14 +804,11 @@ export default function CreditedTransactions() {
       {/* Edit modal */}
 
       <Modal show={editshow} onHide={edithandleClose} animation={false} >
-        <Modal.Header>
-          <h3>Credited Details</h3>
-        </Modal.Header>
-        <Modal.Body>
-          <Card className="bg-secondary shadow border-0 mt-4" >
+        <Modal.Body style={{height:"100%"}}>
+          <Card className="bg-secondary shadow border-0 mt-4"  style={{height:"100%"}}>
             <CardBody className="px-lg-5 py-lg-5"  >
-              <Form role="form" onSubmit={HandleEdit} style={{ marginTop: "-94px" }} >
-                <FormGroup className="mb-3">
+              <Form role="form" onSubmit={HandleEdit}>
+                <FormGroup className="mb-3" style={{marginTop:"-60px"}}>
                   <label>Status</label>
                   <InputGroup className="input-group-alternative">
                     <select
@@ -844,8 +841,8 @@ export default function CreditedTransactions() {
                   </div>
                 )}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit">
-                    Save
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={edithandleClose}>
                     Close

@@ -28,6 +28,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Spinner from 'react-bootstrap/Spinner';
 
 const AdminNavbar = (props) => {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ const AdminNavbar = (props) => {
   const[oldError,setOldError]=useState('');
   const[newError,setNewError]=useState('');
   const[conformError,setConformError]=useState('');
+  const [loading,setLoading]=useState(false);
 
  const handleConform=(e)=>{
   console.log(e.target.value,"xhfghfghfg5657")
@@ -127,7 +129,7 @@ const AdminNavbar = (props) => {
     "newPassword" : newPassword
 
  }
-     
+   setLoading(true);
    axios.put(`${process.env.REACT_APP_BASE_URL}/api/v1/user/change/password/${userid}`,changePayload,{
 
     headers: {
@@ -139,6 +141,7 @@ const AdminNavbar = (props) => {
    .then((res)=>{
      console.log(res,"vfvj");
      setTimeout(()=>{
+      setLoading(false);
       setShow(false);
       toast?.success('Password Successfully Changed',{
         position:"top-right"
@@ -152,6 +155,7 @@ const AdminNavbar = (props) => {
    .catch((error)=>{
     console.log("there might be an error");
     setTimeout(()=>{
+      setLoading(false);
      toast.error("Unsuccessfull Changes!!!")
     },1000)
     
@@ -166,13 +170,14 @@ const AdminNavbar = (props) => {
     
     if(newPassword===conformPassword)
     {
+    
     const changePayload={
     
       "oldPassword" : oldPassword,
       "newPassword" : newPassword
   
    }
-  
+     setLoading(true);
      axios.put(`${process.env.REACT_APP_BASE_URL}/api/v1/user/change/password/${userid}`,changePayload,{
   
       headers: {
@@ -184,6 +189,7 @@ const AdminNavbar = (props) => {
      .then((res)=>{
        console.log(res,"vfvj");
        setTimeout(()=>{
+        setLoading(false);
         toast?.success('Password Successfully Changed',{
           position:"top-right"
         })
@@ -195,6 +201,7 @@ const AdminNavbar = (props) => {
      .catch((error)=>{
       console.log("there might be an error");
       setTimeout(()=>{
+        setLoading(false);
        toast.error("Unsuccessfull Changes!!!")
       },1000)
       
@@ -314,13 +321,6 @@ const AdminNavbar = (props) => {
         <Modal.Body>
           {/* <Col lg="5" md="7"> */}
           <Card className="bg-secondary  shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
-                <h3>Change password</h3>
-              </div>
-              <div className="btn-wrapper text-center">
-              </div>
-            </CardHeader>
             <CardBody className="px-lg-5 py-lg-1">
 
               <Form role="form" onSubmit={ChangeFunction} >
@@ -385,8 +385,8 @@ const AdminNavbar = (props) => {
                   {conformError && <div style={{ color: "red",fontSize:"12px" }}>{conformError}</div>}
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit">
-                    Save
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={HandleChangeClose}>
                     Close
@@ -397,11 +397,6 @@ const AdminNavbar = (props) => {
           </Card>
       
         </Modal.Body>
-        <Modal.Footer>
-
-
-
-        </Modal.Footer>
       </Modal>
 
     </>

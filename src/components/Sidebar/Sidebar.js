@@ -20,6 +20,7 @@ import { useState } from "react";
 import { NavLink as NavLinkRRD, Link, useNavigate } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -53,6 +54,7 @@ import {
 } from "reactstrap";
 import { Navigate } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
+import Spinner from 'react-bootstrap/Spinner';
 var ps;
 
 const Sidebar = (props) => {
@@ -69,7 +71,7 @@ const Sidebar = (props) => {
   const [oldError, setOldError] = useState('');
   const [newError, setNewError] = useState('');
   const [conformError, setConformError] = useState('');
-
+  const [loading,setLoading]=useState(false)
   const handleConform = (e) => {
     console.log(e.target.value, "xhfghfghfg5657")
     const value = e.target.value;
@@ -166,7 +168,7 @@ const Sidebar = (props) => {
           "newPassword": newPassword
 
         }
-
+        setLoading(true)
         axios.put(`${process.env.REACT_APP_BASE_URL}/api/v1/user/change/password/${userid}`, changePayload, {
 
           headers: {
@@ -176,6 +178,7 @@ const Sidebar = (props) => {
         })
 
           .then((res) => {
+            setLoading(false);
             console.log(res, "vfvj");
             setTimeout(() => {
               setShow(false);
@@ -189,6 +192,7 @@ const Sidebar = (props) => {
 
           })
           .catch((error) => {
+            setLoading(false);
             console.log("there might be an error");
             setTimeout(() => {
               toast.error("Unsuccessfull Changes!!!")
@@ -209,7 +213,7 @@ const Sidebar = (props) => {
           "newPassword": newPassword
 
         }
-
+        setLoading(true)
         axios.put(`${process.env.REACT_APP_BASE_URL}/api/v1/user/change/password/${userid}`, changePayload, {
 
           headers: {
@@ -219,6 +223,7 @@ const Sidebar = (props) => {
         })
 
           .then((res) => {
+            setLoading(false)
             console.log(res, "vfvj");
             setTimeout(() => {
               toast?.success('Password Successfully Changed', {
@@ -230,6 +235,7 @@ const Sidebar = (props) => {
 
           })
           .catch((error) => {
+            setLoading(false  )
             console.log("there might be an error");
             setTimeout(() => {
               toast.error("Unsuccessfull Changes!!!")
@@ -513,13 +519,13 @@ const Sidebar = (props) => {
         <Modal.Body>
           {/* <Col lg="5" md="7"> */}
           <Card className="bg-secondary  shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
+            {/* <CardHeader className="bg-transparent pb-5">
               <div className="text-muted text-center mt-2 mb-3">
                 <h3>Change password</h3>
               </div>
               <div className="btn-wrapper text-center">
               </div>
-            </CardHeader>
+            </CardHeader> */}
             <CardBody className="px-lg-5 py-lg-1">
 
               <Form role="form" onSubmit={ChangeFunction} >
@@ -584,8 +590,8 @@ const Sidebar = (props) => {
                   {conformError && <div style={{ color: "red", fontSize: "12px" }}>{conformError}</div>}
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit">
-                    Save
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={HandleChangeClose}>
                     Close

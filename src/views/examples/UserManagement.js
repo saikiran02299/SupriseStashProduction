@@ -500,13 +500,7 @@ export default function UserManagement() {
         <Modal.Body>
           {/* <Col lg="5" md="7"> */}
           <Card className="bg-secondary  shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
-                <h3>Add User</h3>
-              </div>
-              <div className="btn-wrapper text-center">
-              </div>
-            </CardHeader>
+       
             <CardBody className="px-lg-5 py-lg-1">
 
               <Form role="form" noValidate validated={validated} onSubmit={ModalForm} >
@@ -612,10 +606,10 @@ export default function UserManagement() {
                 </label>
               </div> */}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                  {loading ? 'Saving...' : 'Save'}
+                  <Button className="my-4" color="primary" type="submit"  disabled={loading}>
+                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
-                  <Button variant="danger" onClick={handleClose}  disabled={loading}> 
+                  <Button variant="danger" onClick={handleClose}> 
                     Close
                   </Button>
                 </div>
@@ -644,11 +638,6 @@ export default function UserManagement() {
         </Row> */}
           {/* </Col> */}
         </Modal.Body>
-        <Modal.Footer>
-
-
-
-        </Modal.Footer>
       </Modal>
 
       <Modal show={editshow} onHide={EdithandleClose} animation={false}>
@@ -658,13 +647,6 @@ export default function UserManagement() {
         <Modal.Body>
           {/* <Col lg="5" md="7"> */}
           <Card className="bg-secondary  shadow border-0">
-            <CardHeader className="bg-transparent pb-5">
-              <div className="text-muted text-center mt-2 mb-3">
-                <h3>Edit user </h3>
-              </div>
-              <div className="btn-wrapper text-center">
-              </div>
-            </CardHeader>
             <CardBody className="px-lg-5 py-lg-1">
 
               <Form role="form" noValidate validated={validated} onSubmit={ModalEdit} >
@@ -767,8 +749,8 @@ export default function UserManagement() {
                 </label>
               </div> */}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                    {loading?"saving...":"save"}
+                  <Button className="my-4" color="primary" type="submit" >
+                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={EdithandleClose} >
                     Close
@@ -799,11 +781,6 @@ export default function UserManagement() {
         </Row> */}
           {/* </Col> */}
         </Modal.Body>
-        <Modal.Footer>
-
-
-
-        </Modal.Footer>
       </Modal>
 
 

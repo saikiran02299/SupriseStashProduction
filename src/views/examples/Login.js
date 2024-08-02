@@ -36,6 +36,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import Spinner from 'react-bootstrap/Spinner';
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -43,6 +44,7 @@ const Login = () => {
   const [emailError,setEmailError]=useState('');
   const [passwordError,setPasswordError]=useState('');
   const [consumerData, setConsumerData] = useState('');
+  const [loading,setLoading]=useState(false);
   const navigate = useNavigate();
 
 
@@ -67,12 +69,13 @@ const Login = () => {
     //   return;
     // }
 
-    
+    setLoading(true);
     axios.post(`${process.env.REACT_APP_BASE_URL}/api/v1/user/login`, {
       "email": email,
       "password": password
     })
       .then((res) => {
+        setLoading(false);
         console.log(res.data, 'ghfg')
         const userData = res.data;
         console.log(userData, 'vgcfdfcvgh');
@@ -97,6 +100,7 @@ const Login = () => {
         }, 1000);
       })
       .catch((error) => {
+        setLoading(false);
         console.log(" Invalid Creditials")
         toast.error('Invalid Creditials', {
           position: "top-right",
@@ -246,8 +250,8 @@ const Login = () => {
                 </label>
               </div>
               <div className="text-center">
-                <Button className="my-4" color="primary" type="submit">
-                  Sign in
+                <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'Sign in'}
                 </Button>
               </div>
             </Form>
