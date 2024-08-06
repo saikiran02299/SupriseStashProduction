@@ -70,6 +70,8 @@ export default function CreditedUser() {
     const [otherTypeError, setOtherTypeError] = useState('');
     const [paidOthersError, setPaidOthersError] = useState('');
     const [commentsError, setCommentsError] = useState('');
+    const [fromDate,setFromDate] =useState("");
+    const [toDate,setToDate] =useState("");
 
     const [show, setShow] = useState(false);
 
@@ -557,7 +559,14 @@ export default function CreditedUser() {
                         <div className="col">
                             <Card className="shadow">
                                 <CardHeader className="border-0">
-                                    <span className="mb-0">Credited Money</span>
+                                    
+                                    
+                                  
+                                    <input type='date' value={fromDate} onChange={(e)=>setFromDate(e.target.value)} style={{marginLeft:"10px"}}/> 
+
+                                    <input type='date' value={toDate} onChange={(e)=>setToDate(e.target.value)} style={{marginLeft:"20px"}}/> 
+                                   
+                            
 
                                     {/* <button type='button' >ADD</button> */}
                                     <Button variant="primary" style={{ float: "right" }} onClick={handleAdd}>
@@ -572,6 +581,7 @@ export default function CreditedUser() {
                                             <th scope="col">Amount</th>
                                             <th scope="col">Type</th>
                                             <th scope="col">Paid To</th>
+                                            <th scope='col'> Date </th>
                                             <th scope='col'>paid Number</th>
                                             <th scope="col">UTR</th>
                                             <th scope='col'>Status</th>
@@ -594,6 +604,7 @@ export default function CreditedUser() {
                                                         <td>{user.amount}</td>
                                                         <td>{user.type}</td>
                                                         <td>{user.paid_to}</td>
+                                                        <td>{user.createdAt.slice(0,10)}</td>
                                                         <td>{user.paid_number}</td>
                                                         <td>{user.utr}</td>
                                                         <td>{user.approved_status}</td>
@@ -808,7 +819,7 @@ export default function CreditedUser() {
                                     <Button className="my-4" color="primary" type="submit" disabled={loading}>
                                         {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                                     </Button>
-                                    <Button variant="danger" onClick={handleClose} disabled={loading}>
+                                    <Button variant="danger" onClick={handleClose}>
                                         Close
                                     </Button>
                                 </div>
@@ -836,6 +847,7 @@ export default function CreditedUser() {
                                             type="text"
                                             autoComplete="amount"
                                             value={amount}
+                                            disabled
                                             onChange={handleAmountChange}
 
 

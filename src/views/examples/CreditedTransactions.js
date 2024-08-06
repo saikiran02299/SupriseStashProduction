@@ -31,6 +31,7 @@ import {
   InputGroupAddon,
   InputGroupText,
   Input,
+  CardTitle,
 } from "reactstrap";
 import Toggle from 'react-toggle';
 import { toast } from 'react-toastify';
@@ -48,7 +49,7 @@ export default function CreditedTransactions() {
   const [PaidOthers, setPaidOthers] = useState('');
   const [paidNumber, setPaidNumber] = useState('');
   const [utr, setUtr] = useState('');
-  console.log(paidNumber,utr,"dfgdfhd5634gfd")
+  console.log(paidNumber, utr, "dfgdfhd5634gfd")
   const [image, setImage] = useState('');
   const [reason, setReason] = useState('');
   const [selectedOption, setSelectedOption] = useState('');
@@ -73,6 +74,10 @@ export default function CreditedTransactions() {
   const [paidOthersError, setPaidOthersError] = useState('');
   const [commentsError, setCommentsError] = useState('');
   const [userNameError, setUserNameError] = useState('');
+
+
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -123,12 +128,6 @@ export default function CreditedTransactions() {
     //   return true;
   };
 
-
-
-
-
-
-
   const [editshow, setEditShow] = useState(false);
 
   const edithandleClose = () => {
@@ -149,6 +148,30 @@ export default function CreditedTransactions() {
 
 
   }
+  const [users1, setUsers1] = useState('');
+
+  console.log(users, 'bhdbd');
+  const userdata1 = JSON.parse(localStorage.getItem('token' || ''))
+
+  const getApi = () => {
+    setLoading(true);
+
+    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/user/admin/dashboard`, {
+      headers: {
+        "x-auth-token": userdata1
+      }
+    })
+      .then((res) => {
+        console.log(res.data, 'cdid');
+        setUsers1(res.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log('error!!!');
+      })
+
+  }
+
 
   const obj = [
     { label: 'Approved', value: 'Approved' },
@@ -181,6 +204,7 @@ export default function CreditedTransactions() {
       });
   };
   useEffect(() => {
+    getApi();
     getUsers();
     Dropdown();
   }, [pageNumber])
@@ -260,9 +284,9 @@ export default function CreditedTransactions() {
     if (!utr) {
       setUtrError("Please enter a  UTR number.");
       isValid = false;
-    } else if (/^\d*$/.test(utr)){
+    } else if (/^\d*$/.test(utr)) {
       setUtrError(" ");
-    } 
+    }
 
 
     if (!image) {
@@ -270,7 +294,7 @@ export default function CreditedTransactions() {
       isValid = false;
     } else {
       setImageError('');
-      isValid = true;
+
     }
 
     if (options === 'Rejected' && !comments) {
@@ -307,10 +331,10 @@ export default function CreditedTransactions() {
       })
         .then((res) => {
           console.log(res?.data?.data, "kcdceji")
-
           setTimeout(() => {
             setLoading(false)
             getUsers();
+            getApi();
             setShow(false)
             handleClose();
             toast.success('Added Successfully')
@@ -364,11 +388,11 @@ export default function CreditedTransactions() {
     )
       .then((res) => {
         console.log(res.data, "gfhdfhsgjhsgjh")
-       setTimeout(()=>{
-        const filename = res.data.image.filename;
-        setImage(filename);
-       },1000)
-        
+        setTimeout(() => {
+          const filename = res.data.image.filename;
+          setImage(filename);
+        }, 1000)
+
       })
       .catch((err) => {
         console.log(err.response)
@@ -402,11 +426,11 @@ export default function CreditedTransactions() {
     const value = e.target.value;
     if (/^\d*$/.test(value)) {
       setUtr(value);
-     
+
     }
   };
 
- 
+
 
   const handlePaidTo = (e) => {
     const selectPaid = e.target.value;
@@ -470,7 +494,80 @@ export default function CreditedTransactions() {
   return (
     <>
 
-      <TransactionHeader />
+      {/* <TransactionHeader/>   */}
+      <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
+        <Container fluid>
+          <div className="header-body">
+            {/* Card stats */}
+            <Row>
+              <Col lg="6" xl="3">
+                <Card className="card-stats mb-4 mb-xl-0">
+                  <CardBody>
+                    <Row>
+                      <div className="col">
+                        <CardTitle
+                          tag="h5"
+                          className="text-uppercase text-muted mb-0"
+                        >
+                          Total Credited
+                        </CardTitle>
+                        <span >
+                          <small><i class="fa fa-inr" /></small> <strong> {loading ? <Spinner size="sm" /> : users1.totalCreditAmount} </strong>
+                        </span>
+                      </div>
+                      <Col className="col-auto">
+                        <div
+                          className=" bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
+                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
+                        >
+                          <i class="fa-solid fa-money-bill-trend-up"></i>
+                        </div>
+                      </Col>
+                    </Row>
+                    <p className="mt-3 mb-0 text-muted text-sm">
+                      {/* <span className="text-success mr-2">
+                        <i className="fa fa-arrow-up" /> 3.48%
+                      </span>{" "} */}
+                      {/* <span className="text-nowrap">Since last month</span> */}
+                    </p>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col lg="6" xl="3">
+                <Card className="card-stats mb-4 mb-xl-0">
+                  <CardBody>
+                    <Row>
+                      <div className="col">
+                        <CardTitle
+                          tag="h5"
+                          className="text-uppercase text-muted mb-0"
+                        >
+                          Today Credited
+                        </CardTitle>
+                        <span><small><i class="fa fa-inr" /></small> <strong>{loading ? <Spinner size="sm" /> : users1.todayCreditAmount}</strong></span>
+                      </div>
+                      <Col className="col-auto">
+                        <div
+                          className=" bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
+                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
+                        >
+                          <i class="fa-solid fa-money-bill-trend-up"></i>
+                        </div>
+                      </Col>
+                    </Row>
+                    <p className="mt-3 mb-0 text-muted text-sm">
+                      {/* <span className="text-danger mr-2">
+                        <i className="fas fa-arrow-down" /> 3.48%
+                      </span>{" "} */}
+                      {/* <span className="text-nowrap">Since last week</span> */}
+                    </p>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        </Container>
+      </div>
 
       {/* <h1>User Management</h1> */}
 
@@ -483,11 +580,14 @@ export default function CreditedTransactions() {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <span className="mb-0">Credited Money</span>
+                  {/* <span className="mb-0">Credited Money</span> */}
+
+                  <input type='date' value={fromDate} onChange={(e) => setFromDate(e.target.value)} style={{ marginLeft: "10px" }} />
+                  <input type='date' value={toDate} onChange={(e) => setToDate(e.target.value)} style={{ marginLeft: "20px" }} />
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={handleShow}>
-                    ADD Credited Amount
+                    Add Credit Amount
                   </Button>
 
                 </CardHeader>
@@ -497,6 +597,7 @@ export default function CreditedTransactions() {
                       <th scope="col">User Name</th>
                       <th scope="col">Amount</th>
                       <th scope="col">Type</th>
+                      <th scope='col'>Date</th>
                       <th scope="col">Paid To</th>
                       <th scope='col'>paid Number</th>
                       <th scope="col">UTR</th>
@@ -514,45 +615,46 @@ export default function CreditedTransactions() {
                       </tr>
 
                     ) : (
-                      users && users.length>0?(
-                      users.map((user, index) => {
-                        console.log(user, 'bharath');
-                        return (
-                          <tr key={user._id}>
-                            <td>{user?.user[0]?.full_name}</td>
-                            <td>{user.amount}</td>
-                            <td>{user.type}</td>
-                            <td>{user.paid_to}</td>
-                            <td>{user.paid_number}</td>
-                            <td>{user.utr}</td>
-                            <td>{user.approved_status}</td>
-                            <td>
-                              <img
-                                src={user.image}
-                                alt=""
-                                crossOrigin="anonymous"
-                                style={{ width: '50px', height: '50px' }}
-                              />
-                            </td>
-                            <td>
-                              <Button
-                                color="primary"
-                                size="sm"
-                                disabled={user.approved_status !== "Pending"}
-                                onClick={() => Ctrid(user)}
-                              >
-                                Edit
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      })
+                      users && users.length > 0 ? (
+                        users.map((user, index) => {
+                          console.log(user, 'bharath');
+                          return (
+                            <tr key={user._id}>
+                              <td>{user?.user[0]?.full_name}</td>
+                              <td>{user.amount}</td>
+                              <td>{user.type}</td>
+                              <td>{user.createdAt.slice(0, 10)}</td>
+                              <td>{user.paid_to}</td>
+                              <td>{user.paid_number}</td>
+                              <td>{user.utr}</td>
+                              <td>{user.approved_status}</td>
+                              <td>
+                                <img
+                                  src={user.image}
+                                  alt=""
+                                  crossOrigin="anonymous"
+                                  style={{ width: '50px', height: '50px' }}
+                                />
+                              </td>
+                              <td>
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  disabled={user.approved_status !== "Pending"}
+                                  onClick={() => Ctrid(user)}
+                                >
+                                  Edit
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        })
 
-                    ):(
-                       <tr>
-                      <td colSpan="8" className="text-center">Data not found</td>
-                      </tr>
-                    )
+                      ) : (
+                        <tr>
+                          <td colSpan="8" className="text-center">Data not found</td>
+                        </tr>
+                      )
                     )}
                   </tbody>
 
@@ -615,11 +717,11 @@ export default function CreditedTransactions() {
         <Modal.Header>
           {/* <h3>Credited Details</h3> */}
         </Modal.Header>
-        <Modal.Body   style={{height:"100%"}}>
+        <Modal.Body style={{ height: "100%" }}>
           {/* <Col lg="5" md="7"> */}
-          <Card className="bg-secondary shadow border-0"  style={{height:"100%"}}>
+          <Card className="bg-secondary shadow border-0" style={{ height: "100%" }}>
             <CardBody className="px-lg-5 py-lg-5"  >
-              <Form role="form" onSubmit={ModalForm} style={{ marginTop: "-94px",paddingTop:"25px" }} >
+              <Form role="form" onSubmit={ModalForm} style={{ marginTop: "-94px", paddingTop: "25px" }} >
 
                 <FormGroup className="mb-3">
                   <label>User Name:</label>
@@ -787,8 +889,8 @@ export default function CreditedTransactions() {
                   {imageError && <div style={{ color: 'red' }}>{imageError}</div>}
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit"  disabled={loading}>
-                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                    {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={handleClose} disabled={loading}>
                     Close
@@ -804,11 +906,11 @@ export default function CreditedTransactions() {
       {/* Edit modal */}
 
       <Modal show={editshow} onHide={edithandleClose} animation={false} >
-        <Modal.Body style={{height:"100%"}}>
-          <Card className="bg-secondary shadow border-0 mt-4"  style={{height:"100%"}}>
+        <Modal.Body style={{ height: "100%" }}>
+          <Card className="bg-secondary shadow border-0 mt-4" style={{ height: "100%" }}>
             <CardBody className="px-lg-5 py-lg-5"  >
               <Form role="form" onSubmit={HandleEdit}>
-                <FormGroup className="mb-3" style={{marginTop:"-60px"}}>
+                <FormGroup className="mb-3" style={{ marginTop: "-60px" }}>
                   <label>Status</label>
                   <InputGroup className="input-group-alternative">
                     <select
@@ -842,7 +944,7 @@ export default function CreditedTransactions() {
                 )}
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" disabled={loading}>
-                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
+                    {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={edithandleClose}>
                     Close

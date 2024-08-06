@@ -55,6 +55,8 @@ export default function DebitedTransaction() {
   const [previousImage, setPreviousImage] = useState('');
   console.log(image, "dfgfdgfgfghfhgf");
 
+  const [fromDate,setFromDate] =useState("");
+    const [toDate,setToDate] =useState("");
 
 
   const [amountError, setAmountError] = useState('');
@@ -395,7 +397,10 @@ export default function DebitedTransaction() {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <span className="mb-0">Debited Money</span>
+                  {/* <span className="mb-0">Debited Money</span> */}
+
+                  <input type='date' value={fromDate} onChange={(e)=>setFromDate(e.target.value)} style={{marginLeft:"10px"}}/> 
+                  <input type='date' value={toDate} onChange={(e)=>setToDate(e.target.value)} style={{marginLeft:"20px"}}/> 
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={HandleDebited}>
@@ -408,6 +413,7 @@ export default function DebitedTransaction() {
                       <th scope="col">purpose</th>
                       <th scope="col">Amount</th>
                       <th scope='col'>Type</th>
+                      <th scope='col'> Date</th>
                       <th scope="col">Payment Document</th>
                       <th scope='col'>Action</th>
                       {/* <th scope="col">Status</th>
@@ -433,6 +439,7 @@ export default function DebitedTransaction() {
                             <td>{user.purpose}</td>
                             <td>{user.amount}</td>
                             <td>{user.type}</td>
+                            <td>{user.updatedAt.slice(0,10)}</td>
                             <td>
                               <Badge color="" className="badge-dot mr-4">
                                 <img

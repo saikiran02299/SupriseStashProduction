@@ -53,6 +53,8 @@ export default function DebitedUser() {
   const [type, setType] = useState('');
   const [otherType, setOtherType] = useState('');
   const [image, setImage] = useState('');
+  const [fromDate,setFromDate] = useState("");
+  const [toDate,setToDate] = useState("");
 
 
   const userdata = JSON.parse(localStorage.getItem('token' || ''))
@@ -244,7 +246,12 @@ export default function DebitedUser() {
             <div className="col">
               <Card className="shadow">
                 <CardHeader className="border-0">
-                  <span className="mb-0">Debited Money</span>
+                  {/* <span className="mb-0">Debited Money</span> */}
+
+                  <input type='date' value={fromDate} onChange={(e)=>setFromDate(e.target.value)} style={{marginLeft:"10px"}}/> 
+
+                  <input type='date' value={toDate} onChange={(e)=>setToDate(e.target.value)} style={{marginLeft:"20px"}}/> 
+                                   
 
                   {/* <button type='button' >ADD</button> */}
                   {/* <Button variant="primary" style={{ float: "right" }} onClick={HandleDebited}>
@@ -256,6 +263,7 @@ export default function DebitedUser() {
                     <tr>
                       <th scope="col">purpose</th>
                       <th scope='col'>PaidBy</th>
+                      <th scope='col'> Date </th>
 
                       <th scope="col">Amount</th>
 
@@ -285,6 +293,7 @@ export default function DebitedUser() {
                           <tr key={user._id}>
                             <td>{user.purpose}</td>
                             <td>Admin</td>
+                            <td>{user.createdAt.slice(0,10)}</td>
                             <td>{user.amount}</td>
                             <td>{user.type}</td>
                             <td>

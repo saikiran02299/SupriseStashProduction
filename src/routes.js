@@ -68,6 +68,14 @@ var routes = [
     component: <DebitedTransactions/>,
     layout: "/admin",
   },
+  // {
+  //   path: "/MoneyManagement",
+  //   name: "MoneyManagement",
+  //   icon: "fa-solid fa-money-bill-transfer",
+  //   component: <MoneyManagement/>,
+  //   layout: "/admin",
+  // },
+
  
   // {
   //   path: "/maps",

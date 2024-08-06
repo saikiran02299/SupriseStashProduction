@@ -63,6 +63,39 @@ const userdata = JSON.parse(localStorage.getItem('token' || ''))
           <div className="header-body">
             {/* Card stats */}
             <Row>
+
+            <Col lg="6" xl="3" style={{ marginTop: "18px" }}>
+                <Card className="card-stats mb-4 mb-xl-0">
+                  <CardBody>
+                    <Row>
+                      <div className="col">
+                        <CardTitle
+                          tag="h5"
+                          className="text-uppercase text-muted mb-0"
+                        >
+                          Total Users
+                        </CardTitle>
+                        <span>  <strong>{ loading? <Spinner size="sm" />:users.total_users}</strong></span>
+                      </div>
+                      <Col className="col-auto">
+                        <div
+                          className="fa-solid fa-users bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
+                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
+                        >
+                          <i className="fas fa-percent" />
+                        </div>
+                      </Col>
+                    </Row>
+                    <p className="mt-3 mb-0 text-muted text-sm">
+                      {/* <span className="text-success mr-2">
+                        <i className="fas fa-arrow-up" /> 12%
+                      </span>{" "} */}
+                      {/* <span className="text-nowrap">Since last month</span> */}
+                    </p>
+                  </CardBody>
+                </Card>
+              </Col>
+
               <Col lg="6" xl="3" style={{ marginTop: "18px" }}>
                 <Card className="card-stats mb-4 mb-xl-0">
                   <CardBody>
@@ -128,40 +161,7 @@ const userdata = JSON.parse(localStorage.getItem('token' || ''))
                   </CardBody>
                 </Card>
               </Col>
-              <Col lg="6" xl="3" style={{ marginTop: "18px" }}>
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Total Users
-                        </CardTitle>
-                        <span>  <strong>{ loading? <Spinner size="sm" />:users.total_users}</strong></span>
-                      </div>
-                      <Col className="col-auto">
-                        <div
-                          className="fa-solid fa-users bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
-                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
-                        >
-                          <i className="fas fa-percent" />
-                        </div>
-                      </Col>
-
-
-                    </Row>
-                    <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-success mr-2">
-                        <i className="fas fa-arrow-up" /> 12%
-                      </span>{" "} */}
-                      {/* <span className="text-nowrap">Since last month</span> */}
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-
+             
             </Row>
           </div>
         </Container>

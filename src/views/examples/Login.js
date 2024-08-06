@@ -215,7 +215,7 @@ const Login = () => {
                     onChange={handleEmailChange}
                   />
                 </InputGroup>
-                {emailError && <div style={{color:'red'}}> {emailError}</div>}
+                {emailError && <div style={{color:'red',fontSize:"12px"}}> {emailError}</div>}
               
                 
               </FormGroup>
@@ -236,7 +236,7 @@ const Login = () => {
                 </InputGroup>
                 {passwordError && <div style={{color:'red' ,fontSize:"12px"}}>{passwordError}</div>}
               </FormGroup>
-              <div className="custom-control custom-control-alternative custom-checkbox">
+              {/* <div className="custom-control custom-control-alternative custom-checkbox">
                 <input
                   className="custom-control-input"
                   id=" customCheckLogin"
@@ -248,7 +248,7 @@ const Login = () => {
                 >
                   <span className="text-muted">Remember me</span>
                 </label>
-              </div>
+              </div> */}
               <div className="text-center">
                 <Button className="my-4" color="primary" type="submit" disabled={loading}>
                 {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'Sign in'}

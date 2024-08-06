@@ -54,6 +54,7 @@ export default function UserManagement() {
   const [lastError, setLastError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [mobileError, setMobileError] = useState('');
+  const [option,setOptions] = useState("");
 
 
   const [validated, setValidated] = useState(false);
@@ -360,6 +361,11 @@ export default function UserManagement() {
               <Card className="shadow">
                 <CardHeader className="border-0">
                   <span className="mb-0">User Management</span>
+
+                  <select onChange={(e)=>setOptions(e.target.value)} style={{marginLeft:"30px"}}>
+                    <option>Active Users</option>
+                    <option>Inactive Users</option>
+                   </select>
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={HandleAdd}>
