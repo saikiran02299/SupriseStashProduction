@@ -36,9 +36,10 @@ import {
 import Toggle from 'react-toggle';
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
+import Select from 'react-select'
 
 
-export default function CreditedTransactions() {
+const CreditedTransactions = () => {
   const [users, setUsers] = useState([]);
 
 
@@ -56,6 +57,7 @@ export default function CreditedTransactions() {
   const [otherType, setOtherType] = useState('');
   const [userdetails, setUserDetails] = useState('');
   const [userName, setUserName] = useState('');
+  const [userName1, setUserName1] = useState('');
   const [options, setOptions] = useState('Accepted');
   const [comments, setComments] = useState('');
   const [Accepted, setAccepted] = useState('');
@@ -74,14 +76,18 @@ export default function CreditedTransactions() {
   const [paidOthersError, setPaidOthersError] = useState('');
   const [commentsError, setCommentsError] = useState('');
   const [userNameError, setUserNameError] = useState('');
-
-
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-
   const [loading, setLoading] = useState(false);
-
   const [show, setShow] = useState(false);
+  const [viewshow, setViewShow] = useState(false);
+  const [editshow, setEditShow] = useState(false);
+  const [users1, setUsers1] = useState('');
+  const [pageNumber, setPageNumber] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+  const [ViewuserData, setViewUserData] = useState('');
+  console.log(ViewuserData, "ViewuserData");
+
 
   const handleClose = () => {
     setAmount('');
@@ -101,12 +107,30 @@ export default function CreditedTransactions() {
     setUtrError('');
     setImageError('');
     setShow(false);
-
   }
 
 
 
   const handleShow = () => setShow(true);
+
+  const viewhandleClose = () => {
+    setViewShow(false);
+
+  }
+
+
+
+  const viewhandleShow = () => {
+    setViewShow(true);
+  }
+
+
+
+  const handleview = (user) => {
+    console.log(user, "vhf34f3hf");
+    setViewUserData(user);
+    viewhandleShow();
+  }
 
 
   const handleAmountChange = (e) => {
@@ -114,9 +138,9 @@ export default function CreditedTransactions() {
     // Allow only numbers
     if (/^\d*$/.test(value)) {
       setAmount(value);
-    }
-  };
 
+    };
+  }
   const validateUserName = (value) => {
     console.log(value?.target?.value, "value");
     setUserName(value?.target?.value)
@@ -128,7 +152,20 @@ export default function CreditedTransactions() {
     //   return true;
   };
 
-  const [editshow, setEditShow] = useState(false);
+  const validateUserName1 = (value) => {
+    console.log(value, "value");
+    setUserName1(value?.value)
+    GetUsers(fromDate, toDate, value?.value);
+    //   if (!userName) {
+    //     setUserNameError("User name is required.");
+    //     return false;
+    //   }
+    //   setUserNameError("");
+    //   return true;
+  };
+
+
+
 
   const edithandleClose = () => {
     setOptions('Accepted');
@@ -148,12 +185,13 @@ export default function CreditedTransactions() {
 
 
   }
-  const [users1, setUsers1] = useState('');
+
+
 
   console.log(users, 'bhdbd');
   const userdata1 = JSON.parse(localStorage.getItem('token' || ''))
 
-  const getApi = () => {
+  const GetApi = () => {
     setLoading(true);
 
     axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/user/admin/dashboard`, {
@@ -172,21 +210,19 @@ export default function CreditedTransactions() {
 
   }
 
-
   const obj = [
     { label: 'Approved', value: 'Approved' },
     { label: 'Rejected', value: 'Rejected' }
   ]
 
-  const [pageNumber, setPageNumber] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
+
   const userdata = JSON.parse(localStorage.getItem('token' || ''))
   console.log(userdata, 'cfdttrdrg');
   console.log(type, "typeee");
-  const getUsers = () => {
+  const GetUsers = (startdate, enddate, username) => {
     setLoading(true)
     // e.preventDefault();
-    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/admin/list?page=${pageNumber}&limit=10&search=`, {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/admin/list?page=${pageNumber}&limit=10&search=&fromdate=${startdate}&todate=${enddate}&user_uuid=${username}`, {
       headers: {
         "x-auth-token": userdata
       }
@@ -203,11 +239,16 @@ export default function CreditedTransactions() {
         setLoading(false);
       });
   };
-  useEffect(() => {
-    getApi();
-    getUsers();
-    Dropdown();
-  }, [pageNumber])
+
+  const HandleStartDate = (e) => {
+    setFromDate(e.target.value)
+    GetUsers(e.target.value, toDate, userName1)
+  }
+
+  const HandleEndDate = (e) => {
+    setToDate(e.target.value)
+    GetUsers(fromDate, e.target.value, userName1)
+  }
 
   const UsersOption = []
 
@@ -219,6 +260,9 @@ export default function CreditedTransactions() {
   }
 
 
+
+
+  
 
 
   const ModalForm = (e) => {
@@ -333,8 +377,8 @@ export default function CreditedTransactions() {
           console.log(res?.data?.data, "kcdceji")
           setTimeout(() => {
             setLoading(false)
-            getUsers();
-            getApi();
+            GetUsers(fromDate, toDate, userName1);
+            GetApi();
             setShow(false)
             handleClose();
             toast.success('Added Successfully')
@@ -398,6 +442,7 @@ export default function CreditedTransactions() {
         console.log(err.response)
       })
   }
+
   const handleType = (e) => {
     const selectType = e.target.value;
     setType(selectType);
@@ -405,6 +450,7 @@ export default function CreditedTransactions() {
       setOtherType('');
     }
   }
+
   const handleOther = (e) => {
     const custom = e.target.value;
     setOtherType(custom);
@@ -439,6 +485,7 @@ export default function CreditedTransactions() {
       setPaidOthers('');
     }
   }
+
   const handlePaidOthers = (e) => {
     const selectCustom = e.target.value;
     setPaidOthers(selectCustom);
@@ -465,7 +512,7 @@ export default function CreditedTransactions() {
         // setAccepted(res.data.data);
         setTimeout(() => {
           edithandleClose();
-          getUsers();
+          GetUsers(fromDate, toDate, userName1);
           setEditShow(false);
 
         }, 1000)
@@ -480,13 +527,14 @@ export default function CreditedTransactions() {
           position: 'top-right'
         })
 
-
       })
-
-
   }
 
-
+  useEffect(() => {
+    GetApi();
+    GetUsers(fromDate, toDate, userName1);
+    Dropdown();
+  }, [pageNumber]);
 
 
 
@@ -581,9 +629,35 @@ export default function CreditedTransactions() {
               <Card className="shadow">
                 <CardHeader className="border-0">
                   {/* <span className="mb-0">Credited Money</span> */}
+                  <div className='row'>
+                    <div className='col-2'>
+                      <input type='date' value={fromDate} onChange={HandleStartDate} />
+                    </div>
+                    <div className='col-3'>
+                      <input type='date' value={toDate} onChange={HandleEndDate} style={{ marginLeft: "20px" }} />
+                    </div>
+                    <div className='col-3'>
+                      <Select
+                        className=''
+                        options={UsersOption}
+                        // value={userName1}
+                        onChange={validateUserName1}
+                        style={{ width: "150px", height: "40px" }}
 
-                  <input type='date' value={fromDate} onChange={(e) => setFromDate(e.target.value)} style={{ marginLeft: "10px" }} />
-                  <input type='date' value={toDate} onChange={(e) => setToDate(e.target.value)} style={{ marginLeft: "20px" }} />
+                      />
+                      {/* <option value="" disabled>Select User</option>
+
+                      {UsersOption.length > 0 && UsersOption?.map((user) => {
+                        return (
+                          <option key={user.value} value={user.value} >
+                            {user.label}
+                          </option>
+                        )
+                      })}
+                    </select> */}
+                    </div>
+                  </div>
+
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={handleShow}>
@@ -603,6 +677,7 @@ export default function CreditedTransactions() {
                       <th scope="col">UTR</th>
                       <th scope='col'>Status</th>
                       <th scope='col'>Image</th>
+                      <th scope='col'>View</th>
                       <th scope='col'>Edit</th>
                     </tr>
                   </thead>
@@ -635,6 +710,15 @@ export default function CreditedTransactions() {
                                   crossOrigin="anonymous"
                                   style={{ width: '50px', height: '50px' }}
                                 />
+                              </td>
+                              <td>
+                                <Button
+                                  color="primary"
+                                  size="sm"
+                                  onClick={() => handleview(user)}
+                                >
+                                  View
+                                </Button>
                               </td>
                               <td>
                                 <Button
@@ -955,8 +1039,195 @@ export default function CreditedTransactions() {
           </Card>
         </Modal.Body>
       </Modal>
+
+      {/* view */}
+      <Modal show={viewshow} onHide={viewhandleClose} animation={false} >
+        <Modal.Header>
+          {/* <h3>Credited Details</h3> */}
+        </Modal.Header>
+        <Modal.Body style={{ height: "100%" }}>
+          {/* <Col lg="5" md="7"> */}
+          <Card className="bg-secondary shadow border-0" style={{ height: "100%" }}>
+            <CardBody className="px-lg-5 py-lg-5"  >
+              <Form role="form" style={{ marginTop: "-94px", paddingTop: "25px" }} >
+
+                <FormGroup className="mb-3">
+                  <label>User Name:</label>
+                  <InputGroup className="input-group-alternative">
+                    <Input
+                      className='form-control'
+                      value={ViewuserData && ViewuserData?.user && ViewuserData?.user[0]?.full_name}
+                      onChange={validateUserName}
+                      disabled
+                    />
+                  </InputGroup>
+                </FormGroup>
+                <FormGroup className="mb-3">
+                  <label>Amount:</label>
+                  <InputGroup className="input-group-alternative">
+                    <Input
+                      placeholder="Amount"
+                      type="text"
+                      autoComplete="amount"
+                      value={ViewuserData?.amount}
+                      maxLength={10}
+                      disabled
+
+                      onChange={handleAmountChange}
+
+
+                    />
+
+                  </InputGroup>
+                  {amountError && <div style={{ color: 'red' }}>{amountError}</div>}
+
+                </FormGroup>
+                <FormGroup className="mb-3">
+                  <label>PaidType:</label>
+                  <InputGroup className="input-group-alternative">
+                    <select
+                      className='form-control'
+                      value={ViewuserData?.type}
+                      onChange={handleType}
+                      disabled
+
+                    >
+                      <option value="disabled" type="disabled">Type:</option>
+                      <option value="PhoenPay" >Phonepay</option>
+                      <option value="Gpay">Gpay</option>
+                      <option value="Cred">Cred</option>
+                      <option value="Paytm">Paytm</option>
+                      <option value="Cash">Cash</option>
+                      <option value="others">others</option>
+                    </select>
+
+                  </InputGroup>
+                  {typeError && <div style={{ color: 'red' }}>{typeError}</div>}
+                </FormGroup>
+                {type === 'others' && (
+                  <div style={{ padding: '10px', borderRadius: '5px', marginTop: '10px' }}>
+                    <label htmlFor="others">Others:</label>
+                    <InputGroup className="input-group-alternative">
+                      <input
+                        id="inputBox"
+                        type="text"
+                        value={otherType}
+                        onChange={handleOther}
+                        placeholder="Enter Others"
+                        disabled
+
+                        style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '0px' }}
+
+                      />
+                    </InputGroup>
+                    {otherTypeError && <div style={{ color: 'red' }}>{otherTypeError}</div>}
+                  </div>
+
+
+                )}
+
+                <FormGroup className="mb-3">
+                  <label>Paid To:</label>
+                  <InputGroup className="input-group-alternative">
+                    <select
+                      className='form-control'
+                      value={ViewuserData.paid_to}
+                      onChange={handlePaidTo}
+                      disabled
+                    >
+                      <option value="disabled" type="disabled"></option>
+                      <option value="Bharath" >Bharath</option>
+                      <option value="Sandeep">Sandeep</option>
+                      <option value="Others">Others</option>
+                    </select>
+
+                  </InputGroup>
+                  {paidToError && <div style={{ color: 'red' }}>{paidToError}</div>}
+                </FormGroup>
+                {paidto === 'Others' && (
+                  <div style={{ padding: '10px', borderRadius: '5px', marginTop: '10px' }}>
+                    <label htmlFor="others">Others:</label>
+                    <InputGroup className="input-group-alternative">
+                      <input
+                        id="inputBox"
+                        type="text"
+                        value={PaidOthers}
+                        onChange={handlePaidOthers}
+                        placeholder="Enter Others"
+                        required
+                        disabled
+                        style={{ width: '100%', padding: '8px', borderRadius: '5px', border: '0px' }}
+
+                      />
+                    </InputGroup>
+
+                  </div>
+                )}
+                {paidOthersError && <div style={{ color: 'red' }}>{paidOthersError}</div>}
+                <FormGroup>
+                  <label>Mobile Number:</label>
+                  <InputGroup className="input-group-alternative">
+                    <Input
+                      placeholder="Mobile Number"
+                      type="tel"
+                      value={ViewuserData.paid_number}
+                      autoComplete="tel"
+                      disabled
+
+                      // minLength={10}
+                      onChange={handleMobileChange}
+
+
+                    />
+
+
+                  </InputGroup>
+                  {paidNumberError && <div style={{ color: 'red' }}>{paidNumberError}</div>}
+                </FormGroup>
+                <FormGroup>
+                  <label>UTR Number:</label>
+                  <InputGroup className="input-group-alternative">
+                    <Input
+                      placeholder="UTR Number"
+                      type="text"
+                      value={ViewuserData.utr}
+                      disabled
+
+                      onChange={handleUtr}
+
+                    />
+
+                  </InputGroup>
+                  {utrError && <div style={{ color: 'red' }}>{utrError}</div>}
+                </FormGroup>
+                <FormGroup>
+                  <label>Image Screenshort:</label>
+                  {/* <InputGroup className="input-group-alternative">
+                    <Input
+                      // placeholder="ScreenShort"
+                      type="file"
+                      onChange={ImageUpload}
+                      disabled
+                    />
+                  </InputGroup> */}
+                  <br />
+                  <img src={ViewuserData.image} alt='' crossOrigin='anonymous' style={{ height: "50px", width: "50px" }} />
+                  {imageError && <div style={{ color: 'red' }}>{imageError}</div>}
+                </FormGroup>
+                <div className="text-center">
+                  <Button variant="danger" onClick={viewhandleClose} disabled={loading}>
+                    Close
+                  </Button>
+                </div>
+              </Form>
+            </CardBody>
+          </Card>
+        </Modal.Body>
+      </Modal>
+
     </>
-  );
+  )
 }
+export default CreditedTransactions;
 
 

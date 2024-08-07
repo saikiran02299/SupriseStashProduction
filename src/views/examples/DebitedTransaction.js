@@ -105,10 +105,10 @@ export default function DebitedTransaction() {
   const [totalPages, setTotalPages] = useState(0)
   const [loading, setLoading] = useState(false);
 
-  const getUsers = () => {
+  const GetUsers = (startdate, enddate) => {
     setLoading(true)
     // e.preventDefault();
-    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/debit/list?page=${pageNumber}&limit=10&search=`, {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/debit/list?page=${pageNumber}&limit=10&search=&fromdate=${startdate}&todate=${enddate}`, {
       headers: {
         "x-auth-token": userdata
       }
@@ -125,8 +125,19 @@ export default function DebitedTransaction() {
         setLoading(false)
       });
   };
+
+  const HandleStartDate=(e)=>{
+  setFromDate(e.target.value)
+  GetUsers(e.target.value,toDate)
+  }
+
+  const HandleEndDate=(e)=>{
+    setToDate(e.target.value)
+    GetUsers(fromDate,e.target.value)
+  }
+
   useEffect(() => {
-    getUsers();
+     GetUsers(fromDate, toDate);
   }, [pageNumber])
 
 
@@ -234,7 +245,7 @@ export default function DebitedTransaction() {
         console.log(res?.data?.data)
         setTimeout(() => {
           setLoading(false);
-          getUsers();
+           GetUsers(fromDate, toDate);
           setShow(false)
           handleClose();
           toast.success('Debited details added successfully')
@@ -322,7 +333,7 @@ export default function DebitedTransaction() {
       .then((res) => {
         console.log(res?.data?.data)
         setTimeout(() => {
-          getUsers();
+           GetUsers(fromDate, toDate);
           setEditShow(false);
           toast.success('Edited Successfully')
         }, 1000)
@@ -399,8 +410,8 @@ export default function DebitedTransaction() {
                 <CardHeader className="border-0">
                   {/* <span className="mb-0">Debited Money</span> */}
 
-                  <input type='date' value={fromDate} onChange={(e)=>setFromDate(e.target.value)} style={{marginLeft:"10px"}}/> 
-                  <input type='date' value={toDate} onChange={(e)=>setToDate(e.target.value)} style={{marginLeft:"20px"}}/> 
+                  <input type='date' value={fromDate} onChange={HandleStartDate} style={{marginLeft:"10px"}}/> 
+                  <input type='date' value={toDate} onChange={HandleEndDate} style={{marginLeft:"20px"}}/> 
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={HandleDebited}>

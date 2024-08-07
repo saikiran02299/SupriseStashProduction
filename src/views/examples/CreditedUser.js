@@ -131,10 +131,10 @@ export default function CreditedUser() {
 
     const userid = localStorage.getItem('userid');
     const Loginuuid = userid ? JSON.parse(userid) : null;
-    const getUsers = () => {
+    const GetUsers = (startdate,enddate) => {
         setLoading(true);
         // e.preventDefault();
-        axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/user/list?page=${pageNumber}&limit=10&search=&user_uuid=${Loginuuid}`, {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/user/list?page=${pageNumber}&limit=10&search=&user_uuid=${Loginuuid}&fromdate=${startdate}&todate=${enddate}`, {
             headers: {
                 "x-auth-token": userdata
             }
@@ -151,8 +151,18 @@ export default function CreditedUser() {
                 setLoading(false);
             });
     };
+
+    const HandleStartDate=(e)=>{
+        setFromDate(e.target.value)
+        GetUsers(e.target.value, toDate);
+    }
+
+    const HandleEndDate=(e)=>{
+        setToDate(e.target.value)
+        GetUsers(fromDate,e.target.value);
+    }
     useEffect(() => {
-        getUsers();
+       GetUsers(fromDate,toDate);
         Dropdown();
     }, [pageNumber])
 
@@ -305,7 +315,7 @@ export default function CreditedUser() {
                     console.log(res?.data?.data, "kcdceji")
 
                     setTimeout(() => {
-                        getUsers();
+                       GetUsers(fromDate, toDate);
                         setShow(false)
                         handleClose();
                         setLoading(false)
@@ -562,9 +572,9 @@ export default function CreditedUser() {
                                     
                                     
                                   
-                                    <input type='date' value={fromDate} onChange={(e)=>setFromDate(e.target.value)} style={{marginLeft:"10px"}}/> 
+                                    <input type='date' value={fromDate} onChange={HandleStartDate} style={{marginLeft:"10px"}}/> 
 
-                                    <input type='date' value={toDate} onChange={(e)=>setToDate(e.target.value)} style={{marginLeft:"20px"}}/> 
+                                    <input type='date' value={toDate} onChange={HandleEndDate} style={{marginLeft:"20px"}}/> 
                                    
                             
 
