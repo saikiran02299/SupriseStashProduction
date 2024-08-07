@@ -36,6 +36,8 @@ import Toggle from 'react-toggle';
 import { toast } from 'react-toastify';
 import Spinner from 'react-bootstrap/Spinner';
 import { invalid } from 'moment';
+// import Select from 'react-select/dist/declarations/src/Select';
+import Select from 'react-select'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -155,10 +157,10 @@ export default function UserManagement() {
 
   const userdata = JSON.parse(localStorage.getItem('token' || ''))
   console.log(userdata, 'cfdttrdrg');
-  const getUsers = () => {
+  const getUsers = (vishal) => {
     setLoading(true)
     // e.preventDefault();
-    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/user/list?page=${pageNumber}&limit=10&search=`, {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/user/list?page=${pageNumber}&limit=10&search=&active=${vishal}`, {
       headers: {
         "x-auth-token": userdata
       }
@@ -175,7 +177,7 @@ export default function UserManagement() {
       });
   };
   useEffect(() => {
-    getUsers();
+    getUsers(option);
 
   }, [pageNumber])
 
@@ -199,6 +201,19 @@ export default function UserManagement() {
   }
 
 
+  const UsersOption=[
+    {label:"Active Users",value:true},
+    {label:"Inactive Users",value:false}
+  ]
+
+  const HandleUserOption=(event)=>{
+    console.log(event,"2fef3d");
+    
+    setOptions(event?.value);
+    getUsers(event?.value);
+   
+
+  }
 
   const ModalForm = (e) => {
     e.preventDefault();
@@ -262,7 +277,7 @@ export default function UserManagement() {
             setLoading(false);
             setShow(false);
             handleClose();
-            getUsers();
+            getUsers(option);
             toast.success('successfully Added');
           }, 1000)
         
@@ -301,7 +316,7 @@ export default function UserManagement() {
           })
           setTimeout(() => {
             setEditShow(false);
-            getUsers();
+            getUsers(option);
             setLoading(false);
           }, 1000)
         })
@@ -336,7 +351,7 @@ export default function UserManagement() {
           duration: 1000
         })
         setTimeout(() => {
-          getUsers();
+          getUsers(option);
         }, 1000)
       })
       .catch((error) => {
@@ -361,11 +376,16 @@ export default function UserManagement() {
               <Card className="shadow">
                 <CardHeader className="border-0">
                   <span className="mb-0">User Management</span>
-
-                  <select onChange={(e)=>setOptions(e.target.value)} style={{marginLeft:"30px"}}>
-                    <option>Active Users</option>
-                    <option>Inactive Users</option>
-                   </select>
+                  <div className='row'>
+                  <div className='col-12 col-lg-3'>
+                  <Select
+                  className=''
+                  options={UsersOption}
+                  onChange={HandleUserOption}
+                  />
+                  </div>
+                  </div>
+               
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={HandleAdd}>

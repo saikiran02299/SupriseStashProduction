@@ -86,6 +86,7 @@ const CreditedTransactions = () => {
   const [pageNumber, setPageNumber] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
   const [ViewuserData, setViewUserData] = useState('');
+  const [StatusOptions1,setStatusOptions1]=useState("");
   console.log(ViewuserData, "ViewuserData");
 
 
@@ -106,6 +107,7 @@ const CreditedTransactions = () => {
     setPaidNumberError('');
     setUtrError('');
     setImageError('');
+    setUserName("");
     setShow(false);
   }
 
@@ -155,7 +157,7 @@ const CreditedTransactions = () => {
   const validateUserName1 = (value) => {
     console.log(value, "value");
     setUserName1(value?.value)
-    GetUsers(fromDate, toDate, value?.value);
+    GetUsers(fromDate, toDate, value?.value,StatusOptions1);
     //   if (!userName) {
     //     setUserNameError("User name is required.");
     //     return false;
@@ -219,10 +221,10 @@ const CreditedTransactions = () => {
   const userdata = JSON.parse(localStorage.getItem('token' || ''))
   console.log(userdata, 'cfdttrdrg');
   console.log(type, "typeee");
-  const GetUsers = (startdate, enddate, username) => {
+  const GetUsers = (startdate, enddate, username,status) => {
     setLoading(true)
     // e.preventDefault();
-    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/admin/list?page=${pageNumber}&limit=10&search=&fromdate=${startdate}&todate=${enddate}&user_uuid=${username}`, {
+    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/admin/list?page=${pageNumber}&limit=10&search=&fromdate=${startdate}&todate=${enddate}&user_uuid=${username}&approved_status=${status}`, {
       headers: {
         "x-auth-token": userdata
       }
@@ -242,12 +244,12 @@ const CreditedTransactions = () => {
 
   const HandleStartDate = (e) => {
     setFromDate(e.target.value)
-    GetUsers(e.target.value, toDate, userName1)
+    GetUsers(e.target.value, toDate, userName1,StatusOptions1)
   }
 
   const HandleEndDate = (e) => {
     setToDate(e.target.value)
-    GetUsers(fromDate, e.target.value, userName1)
+    GetUsers(fromDate, e.target.value, userName1,StatusOptions1)
   }
 
   const UsersOption = []
@@ -259,8 +261,19 @@ const CreditedTransactions = () => {
     })
   }
 
+  const StatusOptions=[
+    {label:"Accepted",value:"Accepted"},
+    {label:"Rejected",value:"Rejected"},
+    {label:"Pending",value:"Pending"},
+    {label:"All",value:""}
+  ]
 
-
+  const HandleStatusOption=(event)=>{
+    console.log(event,"vh9uhfh31");
+    
+    setStatusOptions1(event?.value)
+    GetUsers(fromDate,toDate,userName1,event?.value)
+  }
 
   
 
@@ -377,7 +390,7 @@ const CreditedTransactions = () => {
           console.log(res?.data?.data, "kcdceji")
           setTimeout(() => {
             setLoading(false)
-            GetUsers(fromDate, toDate, userName1);
+            GetUsers(fromDate, toDate, userName1,StatusOptions1);
             GetApi();
             setShow(false)
             handleClose();
@@ -512,7 +525,7 @@ const CreditedTransactions = () => {
         // setAccepted(res.data.data);
         setTimeout(() => {
           edithandleClose();
-          GetUsers(fromDate, toDate, userName1);
+          GetUsers(fromDate, toDate, userName1,StatusOptions1);
           setEditShow(false);
 
         }, 1000)
@@ -532,7 +545,7 @@ const CreditedTransactions = () => {
 
   useEffect(() => {
     GetApi();
-    GetUsers(fromDate, toDate, userName1);
+    GetUsers(fromDate, toDate, userName1,StatusOptions1);
     Dropdown();
   }, [pageNumber]);
 
@@ -630,19 +643,19 @@ const CreditedTransactions = () => {
                 <CardHeader className="border-0">
                   {/* <span className="mb-0">Credited Money</span> */}
                   <div className='row'>
-                    <div className='col-2'>
+                    <div className='col-12 col-lg-3 mb-2'>
                       <input type='date' value={fromDate} onChange={HandleStartDate} />
                     </div>
-                    <div className='col-3'>
-                      <input type='date' value={toDate} onChange={HandleEndDate} style={{ marginLeft: "20px" }} />
+                    <div className='col-12 col-lg-3 mb-2'>
+                      <input type='date' value={toDate} onChange={HandleEndDate}  />
                     </div>
-                    <div className='col-3'>
+                    <div className='col-12 col-lg-3 mb-2'>
                       <Select
                         className=''
                         options={UsersOption}
                         // value={userName1}
                         onChange={validateUserName1}
-                        style={{ width: "150px", height: "40px" }}
+                        
 
                       />
                       {/* <option value="" disabled>Select User</option>
@@ -655,6 +668,16 @@ const CreditedTransactions = () => {
                         )
                       })}
                     </select> */}
+                   
+                    </div>
+                    <div className='col-12 col-lg-3 mb-2'>
+                    <Select
+                    className=''
+                    options={StatusOptions}
+                    onChange={HandleStatusOption}
+                    
+                    
+                    />
                     </div>
                   </div>
 
