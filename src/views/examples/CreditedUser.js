@@ -592,10 +592,10 @@ export default function CreditedUser() {
                                             <th scope="col">Type</th>
                                             <th scope="col">Paid To</th>
                                             <th scope='col'> Date </th>
-                                            <th scope='col'>paid Number</th>
-                                            <th scope="col">UTR</th>
+                                            {/* <th scope='col'>paid Number</th> */}
+                                            {/* <th scope="col">UTR</th> */}
                                             <th scope='col'>Status</th>
-                                            <th scope='col'>Image</th>
+                                            {/* <th scope='col'>Image</th> */}
                                             <th scope='col'>Edit</th>
                                             {/* <th scope='col'>Edit</th> */}
                                         </tr>
@@ -615,10 +615,10 @@ export default function CreditedUser() {
                                                         <td>{user.type}</td>
                                                         <td>{user.paid_to}</td>
                                                         <td>{user.createdAt.slice(0,10)}</td>
-                                                        <td>{user.paid_number}</td>
-                                                        <td>{user.utr}</td>
+                                                        {/* <td>{user.paid_number}</td> */}
+                                                        {/* <td>{user.utr}</td> */}
                                                         <td>{user.approved_status}</td>
-                                                        <td><img src={user.image} alt='' crossOrigin='anonymous' style={{ width: '50px', height: '50px' }} /></td>
+                                                        {/* <td><img src={user.image} alt='' crossOrigin='anonymous' style={{ width: '50px', height: '50px' }} /></td> */}
                                                         <td><Button color='primary' size="sm" disabled={user.approved_status !== "Rejected"} onClick={() => handleEdit(user)} >Edit</Button></td>
                                                     </tr>
                                                 ))

@@ -135,7 +135,7 @@ const Transaction_User = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                         Today User Credit
+                         Today Your Credit
                         </CardTitle>
                         <span>   <small><i class="fa fa-inr"/></small> <strong>{loading? <Spinner size="sm" />:users.todayUserCreditAmount}</strong></span>
                       </div>
@@ -167,7 +167,7 @@ const Transaction_User = () => {
                           tag="h5"
                           className="text-uppercase text-muted mb-0"
                         >
-                        Total User credit
+                        Total Your credit
                         </CardTitle>
                         <span>   <small><i class="fa fa-inr"/></small> <strong>{ loading? <Spinner size="sm" />:users.totalUserCreditAmount}</strong></span>
                       </div>

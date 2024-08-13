@@ -377,7 +377,7 @@ export default function UserManagement() {
                 <CardHeader className="border-0">
                   <span className="mb-0">User Management</span>
                   <div className='row'>
-                  <div className='col-12 col-lg-3'>
+                  <div className='col-12 col-lg-3 mt-2'>
                   <Select
                   className=''
                   options={UsersOption}
@@ -388,7 +388,7 @@ export default function UserManagement() {
                
 
                   {/* <button type='button' >ADD</button> */}
-                  <Button variant="primary" style={{ float: "right" }} onClick={HandleAdd}>
+                  <Button variant="primary" style={{ float: "right",marginTop:"4px" }} onClick={HandleAdd}>
                     ADD
                   </Button>
                 </CardHeader>

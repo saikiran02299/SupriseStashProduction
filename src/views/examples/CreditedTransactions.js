@@ -193,25 +193,6 @@ const CreditedTransactions = () => {
   console.log(users, 'bhdbd');
   const userdata1 = JSON.parse(localStorage.getItem('token' || ''))
 
-  const GetApi = () => {
-    setLoading(true);
-
-    axios.get(`${process.env.REACT_APP_BASE_URL}/api/v1/user/admin/dashboard`, {
-      headers: {
-        "x-auth-token": userdata1
-      }
-    })
-      .then((res) => {
-        console.log(res.data, 'cdid');
-        setUsers1(res.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('error!!!');
-      })
-
-  }
-
   const obj = [
     { label: 'Approved', value: 'Approved' },
     { label: 'Rejected', value: 'Rejected' }
@@ -391,7 +372,6 @@ const CreditedTransactions = () => {
           setTimeout(() => {
             setLoading(false)
             GetUsers(fromDate, toDate, userName1,StatusOptions1);
-            GetApi();
             setShow(false)
             handleClose();
             toast.success('Added Successfully')
@@ -513,6 +493,7 @@ const CreditedTransactions = () => {
       "comments": comments
 
     }
+    setLoading(true)
     axios.put(`${process.env.REACT_APP_BASE_URL}/api/v1/transaction/credit/status/update/${CtrId}`, EditPayload, {
 
       headers: {
@@ -527,6 +508,7 @@ const CreditedTransactions = () => {
           edithandleClose();
           GetUsers(fromDate, toDate, userName1,StatusOptions1);
           setEditShow(false);
+          setLoading(false)
 
         }, 1000)
         toast.success(res.data.message, {
@@ -536,6 +518,7 @@ const CreditedTransactions = () => {
       })
       .catch((error) => {
         console.log("there is an error", error);
+        setLoading(false)
         toast.error("Updated Failed!!", {
           position: 'top-right'
         })
@@ -544,91 +527,21 @@ const CreditedTransactions = () => {
   }
 
   useEffect(() => {
-    GetApi();
     GetUsers(fromDate, toDate, userName1,StatusOptions1);
     Dropdown();
   }, [pageNumber]);
 
+  useEffect(() => {
+    setPageNumber(0); // Reset to the first page
+}, [fromDate, toDate, userName1, StatusOptions1]);
 
 
 
   return (
     <>
 
-      {/* <TransactionHeader/>   */}
-      <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
-        <Container fluid>
-          <div className="header-body">
-            {/* Card stats */}
-            <Row>
-              <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Total Credited
-                        </CardTitle>
-                        <span >
-                          <small><i class="fa fa-inr" /></small> <strong> {loading ? <Spinner size="sm" /> : users1.totalCreditAmount} </strong>
-                        </span>
-                      </div>
-                      <Col className="col-auto">
-                        <div
-                          className=" bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
-                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
-                        >
-                          <i class="fa-solid fa-money-bill-trend-up"></i>
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 3.48%
-                      </span>{" "} */}
-                      {/* <span className="text-nowrap">Since last month</span> */}
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col lg="6" xl="3">
-                <Card className="card-stats mb-4 mb-xl-0">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Today Credited
-                        </CardTitle>
-                        <span><small><i class="fa fa-inr" /></small> <strong>{loading ? <Spinner size="sm" /> : users1.todayCreditAmount}</strong></span>
-                      </div>
-                      <Col className="col-auto">
-                        <div
-                          className=" bg-info text-white rounded-circle shadow d-flex align-items-center justify-content-center"
-                          style={{ fontSize: "22px", height: '50px', width: "50px", lineHeight: "50px" }}
-                        >
-                          <i class="fa-solid fa-money-bill-trend-up"></i>
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-muted text-sm">
-                      {/* <span className="text-danger mr-2">
-                        <i className="fas fa-arrow-down" /> 3.48%
-                      </span>{" "} */}
-                      {/* <span className="text-nowrap">Since last week</span> */}
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-            </Row>
-          </div>
-        </Container>
-      </div>
+      <TransactionHeader/>  
+    
 
       {/* <h1>User Management</h1> */}
 
@@ -642,6 +555,14 @@ const CreditedTransactions = () => {
               <Card className="shadow">
                 <CardHeader className="border-0">
                   {/* <span className="mb-0">Credited Money</span> */}
+                  <div className='row mt-0'>
+                    <div className='col-12 col-lg-12 mb-2'>
+                   <Button variant="primary" style={{ float: "right"}} onClick={handleShow}>
+                    Add Credit Amount
+                  </Button>
+                  </div>
+                  </div>
+
                   <div className='row'>
                     <div className='col-12 col-lg-3 mb-2'>
                       <input type='date' value={fromDate} onChange={HandleStartDate} />
@@ -652,6 +573,7 @@ const CreditedTransactions = () => {
                     <div className='col-12 col-lg-3 mb-2'>
                       <Select
                         className=''
+                        placeholder="Select User..."
                         options={UsersOption}
                         // value={userName1}
                         onChange={validateUserName1}
@@ -673,6 +595,7 @@ const CreditedTransactions = () => {
                     <div className='col-12 col-lg-3 mb-2'>
                     <Select
                     className=''
+                    placeholder="status..."
                     options={StatusOptions}
                     onChange={HandleStatusOption}
                     
@@ -682,11 +605,7 @@ const CreditedTransactions = () => {
                   </div>
 
 
-                  {/* <button type='button' >ADD</button> */}
-                  <Button variant="primary" style={{ float: "right" }} onClick={handleShow}>
-                    Add Credit Amount
-                  </Button>
-
+                 
                 </CardHeader>
                 <Table className="align-items-center table-flush" responsive>
                   <thead className="thead-light">
@@ -696,10 +615,10 @@ const CreditedTransactions = () => {
                       <th scope="col">Type</th>
                       <th scope='col'>Date</th>
                       <th scope="col">Paid To</th>
-                      <th scope='col'>paid Number</th>
-                      <th scope="col">UTR</th>
+                      {/* <th scope='col'>paid Number</th> */}
+                      {/* <th scope="col">UTR</th> */}
                       <th scope='col'>Status</th>
-                      <th scope='col'>Image</th>
+                      {/* <th scope='col'>Image</th> */}
                       <th scope='col'>View</th>
                       <th scope='col'>Edit</th>
                     </tr>
@@ -723,17 +642,17 @@ const CreditedTransactions = () => {
                               <td>{user.type}</td>
                               <td>{user.createdAt.slice(0, 10)}</td>
                               <td>{user.paid_to}</td>
-                              <td>{user.paid_number}</td>
-                              <td>{user.utr}</td>
+                              {/* <td>{user.paid_number}</td> */}
+                              {/* <td>{user.utr}</td> */}
                               <td>{user.approved_status}</td>
-                              <td>
+                              {/* <td>
                                 <img
                                   src={user.image}
                                   alt=""
                                   crossOrigin="anonymous"
                                   style={{ width: '50px', height: '50px' }}
                                 />
-                              </td>
+                              </td> */}
                               <td>
                                 <Button
                                   color="primary"
@@ -1079,8 +998,8 @@ const CreditedTransactions = () => {
                   <InputGroup className="input-group-alternative">
                     <Input
                       className='form-control'
-                      value={ViewuserData && ViewuserData?.user && ViewuserData?.user[0]?.full_name}
-                      onChange={validateUserName}
+                      defaultValue={ViewuserData && ViewuserData?.user && ViewuserData?.user[0]?.full_name}
+                      // onChange={validateUserName}
                       disabled
                     />
                   </InputGroup>
@@ -1092,11 +1011,11 @@ const CreditedTransactions = () => {
                       placeholder="Amount"
                       type="text"
                       autoComplete="amount"
-                      value={ViewuserData?.amount}
-                      maxLength={10}
+                      defaultValue={ViewuserData?.amount}
+                      // maxLength={10}
                       disabled
 
-                      onChange={handleAmountChange}
+                      // onChange={handleAmountChange}
 
 
                     />
@@ -1108,7 +1027,13 @@ const CreditedTransactions = () => {
                 <FormGroup className="mb-3">
                   <label>PaidType:</label>
                   <InputGroup className="input-group-alternative">
-                    <select
+                  <Input
+                      className='form-control'
+                      defaultValue={ViewuserData?.type}
+                      disabled
+
+                    />
+                    {/* <select
                       className='form-control'
                       value={ViewuserData?.type}
                       onChange={handleType}
@@ -1122,7 +1047,7 @@ const CreditedTransactions = () => {
                       <option value="Paytm">Paytm</option>
                       <option value="Cash">Cash</option>
                       <option value="others">others</option>
-                    </select>
+                    </select> */}
 
                   </InputGroup>
                   {typeError && <div style={{ color: 'red' }}>{typeError}</div>}
@@ -1152,7 +1077,13 @@ const CreditedTransactions = () => {
                 <FormGroup className="mb-3">
                   <label>Paid To:</label>
                   <InputGroup className="input-group-alternative">
-                    <select
+                  <Input
+                      className='form-control'
+                      defaultValue={ViewuserData.paid_to}
+                      disabled
+
+                    />
+                    {/* <select
                       className='form-control'
                       value={ViewuserData.paid_to}
                       onChange={handlePaidTo}
@@ -1162,7 +1093,7 @@ const CreditedTransactions = () => {
                       <option value="Bharath" >Bharath</option>
                       <option value="Sandeep">Sandeep</option>
                       <option value="Others">Others</option>
-                    </select>
+                    </select> */}
 
                   </InputGroup>
                   {paidToError && <div style={{ color: 'red' }}>{paidToError}</div>}
@@ -1193,12 +1124,12 @@ const CreditedTransactions = () => {
                     <Input
                       placeholder="Mobile Number"
                       type="tel"
-                      value={ViewuserData.paid_number}
+                      defaultValue={ViewuserData.paid_number}
                       autoComplete="tel"
                       disabled
 
                       // minLength={10}
-                      onChange={handleMobileChange}
+                      // onChange={handleMobileChange}
 
 
                     />
@@ -1213,10 +1144,10 @@ const CreditedTransactions = () => {
                     <Input
                       placeholder="UTR Number"
                       type="text"
-                      value={ViewuserData.utr}
+                      defaultValue={ViewuserData.utr}
                       disabled
 
-                      onChange={handleUtr}
+                      // onChange={handleUtr}
 
                     />
 

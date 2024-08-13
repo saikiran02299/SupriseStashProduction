@@ -55,8 +55,8 @@ export default function DebitedTransaction() {
   const [previousImage, setPreviousImage] = useState('');
   console.log(image, "dfgfdgfgfghfhgf");
 
-  const [fromDate,setFromDate] =useState("");
-    const [toDate,setToDate] =useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
 
 
   const [amountError, setAmountError] = useState('');
@@ -126,18 +126,18 @@ export default function DebitedTransaction() {
       });
   };
 
-  const HandleStartDate=(e)=>{
-  setFromDate(e.target.value)
-  GetUsers(e.target.value,toDate)
+  const HandleStartDate = (e) => {
+    setFromDate(e.target.value)
+    GetUsers(e.target.value, toDate)
   }
 
-  const HandleEndDate=(e)=>{
+  const HandleEndDate = (e) => {
     setToDate(e.target.value)
-    GetUsers(fromDate,e.target.value)
+    GetUsers(fromDate, e.target.value)
   }
 
   useEffect(() => {
-     GetUsers(fromDate, toDate);
+    GetUsers(fromDate, toDate);
   }, [pageNumber])
 
 
@@ -245,7 +245,7 @@ export default function DebitedTransaction() {
         console.log(res?.data?.data)
         setTimeout(() => {
           setLoading(false);
-           GetUsers(fromDate, toDate);
+          GetUsers(fromDate, toDate);
           setShow(false)
           handleClose();
           toast.success('Debited details added successfully')
@@ -333,7 +333,7 @@ export default function DebitedTransaction() {
       .then((res) => {
         console.log(res?.data?.data)
         setTimeout(() => {
-           GetUsers(fromDate, toDate);
+          GetUsers(fromDate, toDate);
           setEditShow(false);
           toast.success('Edited Successfully')
         }, 1000)
@@ -372,10 +372,10 @@ export default function DebitedTransaction() {
     })
       .then((res) => {
         console.log(res.data, "qwoeowi")
-       setTimeout(()=>{
-        const filename = res.data.image.filename;
-        setImage(filename);
-       },1000)
+        setTimeout(() => {
+          const filename = res.data.image.filename;
+          setImage(filename);
+        }, 1000)
       })
       .catch((err) => {
         console.log(err.response)
@@ -410,8 +410,8 @@ export default function DebitedTransaction() {
                 <CardHeader className="border-0">
                   {/* <span className="mb-0">Debited Money</span> */}
 
-                  <input type='date' value={fromDate} onChange={HandleStartDate} style={{marginLeft:"10px"}}/> 
-                  <input type='date' value={toDate} onChange={HandleEndDate} style={{marginLeft:"20px"}}/> 
+                  <input type='date' value={fromDate} onChange={HandleStartDate} style={{ marginLeft: "10px" }} />
+                  <input type='date' value={toDate} onChange={HandleEndDate} style={{ marginLeft: "20px" }} />
 
                   {/* <button type='button' >ADD</button> */}
                   <Button variant="primary" style={{ float: "right" }} onClick={HandleDebited}>
@@ -442,40 +442,40 @@ export default function DebitedTransaction() {
                       </tr>
 
                     ) : (
-                      users && users.length>0?(
-                      users.map((user, index) => {
-                        console.log(user, 'vgftrfyg');
-                        return (
-                          <tr key={user._id}>
-                            <td>{user.purpose}</td>
-                            <td>{user.amount}</td>
-                            <td>{user.type}</td>
-                            <td>{user.updatedAt.slice(0,10)}</td>
-                            <td>
-                              <Badge color="" className="badge-dot mr-4">
-                                <img
-                                  src={user.bill}
-                                  alt=""
-                                  crossOrigin="anonymous"
-                                  style={{ width: '50px', height: '50px' }}
-                                />
-                              </Badge>
-                            </td>
-                            <td>
-                              <Button variant="primary" size="sm" onClick={() => handleEdit(user)}>
-                                Edit
-                              </Button>
-                            </td>
-                          </tr>
-                        );
-                      })
+                      users && users.length > 0 ? (
+                        users.map((user, index) => {
+                          console.log(user, 'vgftrfyg');
+                          return (
+                            <tr key={user._id}>
+                              <td>{user.purpose}</td>
+                              <td>{user.amount}</td>
+                              <td>{user.type}</td>
+                              <td>{user.updatedAt.slice(0, 10)}</td>
+                              <td>
+                                <Badge color="" className="badge-dot mr-4">
+                                  <img
+                                    src={user.bill}
+                                    alt=""
+                                    crossOrigin="anonymous"
+                                    style={{ width: '50px', height: '50px' }}
+                                  />
+                                </Badge>
+                              </td>
+                              <td>
+                                <Button variant="primary" size="sm" onClick={() => handleEdit(user)}>
+                                  Edit
+                                </Button>
+                              </td>
+                            </tr>
+                          );
+                        })
 
-                    ):( 
-                      <tr>
-                      <td colSpan="8" className="text-center">Data not found</td>
-                      </tr>
-                    )
-                    ) }
+                      ) : (
+                        <tr>
+                          <td colSpan="8" className="text-center">Data not found</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
 
                 </Table>
@@ -536,9 +536,9 @@ export default function DebitedTransaction() {
         {/* <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header> */}
-        <Modal.Body style={{ height:'100%' }}>
+        <Modal.Body style={{ height: '100%' }}>
           {/* <Col lg="5" md="7"> */}
-          <Card className="bg-secondary shadow border-0" style={{ height:'100%' }}>
+          <Card className="bg-secondary shadow border-0" style={{ height: '100%' }}>
             <CardHeader className="bg-transparent pb-5">
               {/* <div className="text-muted text-center mt-2 mb-3">
                 <large>Debited Details </large>
@@ -688,7 +688,7 @@ export default function DebitedTransaction() {
               </div> */}
                 <div className="text-center">
                   <Button className="my-4" color="primary" type="submit" disabled={loading} >
-                  {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
+                    {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={handleClose}>
                     Close
@@ -719,7 +719,7 @@ export default function DebitedTransaction() {
         </Row> */}
           {/* </Col> */}
         </Modal.Body>
-       
+
       </Modal>
 
 
@@ -727,9 +727,9 @@ export default function DebitedTransaction() {
         {/* <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header> */}
-        <Modal.Body style={{ height:'100%'}}>
+        <Modal.Body style={{ height: '100%' }}>
           {/* <Col lg="5" md="7"> */}
-          <Card className="bg-secondary shadow border-0" style={{ height:'100%'}}>
+          <Card className="bg-secondary shadow border-0" style={{ height: '100%' }}>
             <CardHeader className="bg-transparent pb-5">
               {/* <div className="text-muted text-center mt-2 mb-3">
                 <large>Debited Details </large>
@@ -870,8 +870,8 @@ export default function DebitedTransaction() {
                 </label>
               </div> */}
                 <div className="text-center">
-                  <Button className="my-4" color="primary" type="submit"  disabled={loading}>
-                     {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
+                  <Button className="my-4" color="primary" type="submit" disabled={loading}>
+                    {loading ? <Spinner style={{ width: "1rem", height: "1rem" }} className="spinner-border-custom" /> : 'save'}
                   </Button>
                   <Button variant="danger" onClick={EdithandleClose}>
                     Close

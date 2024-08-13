@@ -358,9 +358,6 @@ const AdminNavbar = (props) => {
                       onChange={handleNewPasswordChange}
                       minLength={4}
                       maxLength={10}
-
-                      
-
                     />
 
                   </InputGroup>
